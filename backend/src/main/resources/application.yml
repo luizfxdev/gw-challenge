@@ -1,0 +1,39 @@
+# Configuração principal do Spring Boot
+spring:
+  # Configuração da fonte de dados (DataSource) - PostgreSQL
+  datasource:
+    url: jdbc:postgresql://localhost:5432/gwchallenge # URL de conexão com o banco
+    username: postgres # Usuário do banco de dados
+    password: password # Senha do banco de dados
+    driver-class-name: org.postgresql.Driver # Driver JDBC do PostgreSQL
+
+  # Configuração do JPA/Hibernate
+  jpa:
+    hibernate:
+      ddl-auto: none # Não gera/altera schema automaticamente (usamos migrations manuais)
+    show-sql: true # Exibe queries SQL no console (útil para debug)
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect # Dialeto específico do PostgreSQL
+        format_sql: true # Formata SQL no console para melhor legibilidade
+        use_sql_comments: true # Adiciona comentários nas queries geradas
+
+  # Configuração do servidor web embutido
+  application:
+    name: gw-challenge # Nome da aplicação
+
+# Configuração do servidor Tomcat embutido
+server:
+  port: 8080 # Porta onde a aplicação será executada
+  servlet:
+    context-path: / # Contexto raiz da aplicação
+  error:
+    include-message: always # Inclui mensagens de erro nas respostas
+    include-stacktrace: never # Não expõe stacktrace em produção (segurança)
+
+# Configuração de logging
+logging:
+  level:
+    com.gwchallenge: DEBUG # Nível de log para o pacote da aplicação
+    org.hibernate.SQL: DEBUG # Log de queries SQL
+    org.springframework.web: INFO # Log do Spring Web

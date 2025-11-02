@@ -1,0 +1,43 @@
+// Configuração do Prisma para geração de schema e client
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Configuração da conexão com o banco de dados PostgreSQL
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // URL de conexão definida no arquivo .env
+}
+
+// Enum que define os possíveis status de um evento de rastreamento
+// Corresponde ao enum Java EventStatus e ao tipo PostgreSQL event_status
+enum EventStatus {
+  OUT_FOR_DELIVERY // Saída para Entrega
+  IN_TRANSIT // Em Trânsito
+  UNDELIVERED // Não Entregue
+  DELIVERED // Entregue
+}
+
+// Modelo que representa uma Encomenda (Package)
+// Contém informações básicas da encomenda e relacionamento 1:N com eventos
+model Package {
+  trackingCode    String  @id @map("tracking_code") @db.VarChar(50) // Código de rastreio único (PK)
+  clientName      String  @map("client_name") @db.VarChar(100) // Nome do cliente
+  deliveryAddress String  @map("delivery_address") @db.Text // Endereço de entrega
+  events          Event[] // Relacionamento 1:N - uma encomenda possui vários eventos
+
+  @@map("package") // Nome da tabela no banco de dados
+}
+
+// Modelo que representa um Evento de Rastreamento (Event)
+// Cada evento está associado a uma encomenda e registra mudanças de status
+model Event {
+  id             Int         @id @default(autoincrement()) // ID auto-incrementado (PK)
+  status         EventStatus // Status do evento (enum)
+  eventTimestamp DateTime    @default(now()) @map("event_timestamp") @db.Timestamp // Data/hora do evento
+  trackingCode   String      @map("tracking_code") @db.VarChar(50) // FK para Package
+  package        Package     @relation(fields: [trackingCode], references: [trackingCode], onDelete: Cascade) // Relacionamento N:1
+
+  @@index([trackingCode]) // Índice para otimizar buscas por código de rastreio
+  @@map("event") // Nome da tabela no banco de dados
+}

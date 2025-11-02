@@ -1,0 +1,26 @@
+cat > .gitignore <<'EOF'
+# Maven
+target/
+dependency-reduced-pom.xml
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Logs e temp
+*.log
+logs/
+nohup.out
+backend.log
+
+# Arquivos temporários do WSL/Linux
+*.swp
+*~
+EOF
