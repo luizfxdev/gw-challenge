@@ -1,0 +1,117 @@
+/* ======================== GLOBAL STYLES ======================== */
+/* This file contains:
+ * 1. Google Fonts import (Lato)
+ * 2. Tailwind CSS directives
+ * 3. Global resets and custom utilities
+ * 4. Custom animations
+ * 5. Custom scrollbar styles
+ */
+
+/* Importar fonte Lato do Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap');
+
+/* Importar configurações base do Tailwind */
+/* IMPORTANTE: Estas diretivas são processadas pelo PostCSS e geram todo o CSS do Tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ======================== RESET E CONFIGURAÇÕES GLOBAIS ======================== */
+/* Reset básico para garantir consistência entre navegadores */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Lato', sans-serif;
+  overflow-x: hidden;
+}
+
+/* Garantir que o body não tenha background padrão */
+body {
+  background: transparent;
+}
+
+/* ======================== VARIÁVEIS DE CORES GW SISTEMAS ======================== */
+/* Variáveis CSS customizadas para cores da marca */
+:root {
+  --gw-blue-primary: #0099ff;
+  --gw-blue-dark: #0077cc;
+  --gw-blue-light: #33aaff;
+  --gw-blue-lighter: #66bbff;
+  --gw-white: #ffffff;
+  --gw-gray-light: #f5f5f5;
+  --gw-gray-medium: #cccccc;
+  --gw-gray-dark: #666666;
+  --gw-text-dark: #1a1a1a;
+}
+
+/* ======================== CLASSES UTILITÁRIAS CUSTOMIZADAS ======================== */
+/* Classes customizadas que complementam o Tailwind */
+
+/* Container responsivo customizado */
+.container-gw {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Utilitários de cor usando variáveis CSS */
+.text-gw-blue {
+  color: var(--gw-blue-primary);
+}
+
+.bg-gw-blue {
+  background-color: var(--gw-blue-primary);
+}
+
+.bg-gw-blue-dark {
+  background-color: var(--gw-blue-dark);
+}
+
+.border-gw-blue {
+  border-color: var(--gw-blue-primary);
+}
+
+/* ======================== ANIMAÇÕES ======================== */
+/* Animação de fade-in para elementos que aparecem dinamicamente */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* ======================== SCROLLBAR CUSTOMIZADA ======================== */
+/* Estilização da scrollbar para navegadores Webkit (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--gw-gray-light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gw-blue-primary);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gw-blue-dark);
+}

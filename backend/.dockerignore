@@ -1,0 +1,7 @@
+# Ignorar arquivos desnecessários no build Docker
+target/
+.mvn/wrapper/maven-wrapper.jar
+*.log
+.git
+.gitignore
+README.md

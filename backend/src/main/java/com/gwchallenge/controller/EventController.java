@@ -1,110 +1,105 @@
 package com.gwchallenge.controller;
 
-import com.gwchallenge.exception.ResourceNotFoundException;
-import com.gwchallenge.model.Event;
-import com.gwchallenge.model.Package;
-import com.gwchallenge.repository.EventRepository;
-import com.gwchallenge.repository.PackageRepository;
+import com.gwchallenge.dto.CreateEventDTO;
+import com.gwchallenge.dto.EventResponseDTO;
+import com.gwchallenge.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * EventController
- *
- * Controlador REST responsável por gerenciar operações relacionadas a eventos de rastreamento de pacotes.
- * Cada evento pertence a um pacote e registra o status e a descrição de uma atualização.
- *
- * A classe expõe endpoints para criar, listar e buscar eventos de um pacote específico.
+ * Controlador REST para gerenciar eventos de rastreamento.
+ * 
+ * REFATORADO: Agora delega toda lógica para EventService.
+ * O controller apenas:
+ * - Recebe requisições HTTP
+ * - Valida dados de entrada (@Valid)
+ * - Chama o Service apropriado
+ * - Retorna ResponseEntity com status HTTP correto
+ * 
+ * ✅ CRÍTICO: Todos os endpoints retornam DTOs, NUNCA entidades JPA.
+ * Isso evita StackOverflowError ao serializar JSON.
  */
 @RestController
 @RequestMapping("/api/events")
 public class EventController {
 
-    // Injeta o repositório de eventos (acesso direto ao banco via JPA)
+    // Injeta o serviço que contém a lógica de negócio
     @Autowired
-    private EventRepository eventRepository;
-
-    // Injeta o repositório de pacotes (usado para validar se o pacote existe)
-    @Autowired
-    private PackageRepository packageRepository;
+    private EventService eventService;
 
     /**
-     * Retorna a lista de todos os eventos cadastrados no sistema.
+     * GET /api/events
+     * Lista todos os eventos cadastrados no sistema.
+     * 
+     * @return Lista de EventResponseDTO com status 200 OK
      */
     @GetMapping
-    public ResponseEntity<List<Event>> getAllEvents() {
-        List<Event> events = eventRepository.findAll();
+    public ResponseEntity<List<EventResponseDTO>> getAllEvents() {
+        List<EventResponseDTO> events = eventService.getAllEvents();
         return ResponseEntity.ok(events);
     }
 
     /**
-     * Retorna todos os eventos associados a um pacote, com base no seu código de rastreio.
-     *
-     * @param trackingCode código de rastreamento do pacote
+     * GET /api/events/package/{trackingCode}
+     * Busca todos os eventos de um pacote específico.
+     * 
+     * @param trackingCode Código de rastreio do pacote
+     * @return Lista de EventResponseDTO ordenada por data (mais recentes primeiro)
      */
     @GetMapping("/package/{trackingCode}")
-    public ResponseEntity<List<Event>> getEventsByPackage(@PathVariable String trackingCode) {
-        // Verifica se o pacote existe antes de buscar eventos
-        if (!packageRepository.existsByTrackingCode(trackingCode)) {
-            throw new ResourceNotFoundException("Package with tracking code '" + trackingCode + "' not found");
-        }
-
-        // Busca eventos ordenados por timestamp decrescente
-        List<Event> events = eventRepository.findByPackageEntity_TrackingCodeOrderByEventTimestampDesc(trackingCode);
+    public ResponseEntity<List<EventResponseDTO>> getEventsByPackage(
+            @PathVariable String trackingCode) {
+        
+        List<EventResponseDTO> events = eventService.getEventsByTrackingCode(trackingCode);
         return ResponseEntity.ok(events);
     }
 
     /**
-     * Cria um novo evento relacionado a um pacote.
-     *
-     * @param trackingCode código de rastreamento do pacote
-     * @param event        dados do evento (status, descrição, etc.)
+     * POST /api/events/package/{trackingCode}
+     * Cria um novo evento para um pacote específico.
+     * 
+     * ANTES: Retornava entidade Event (causava StackOverflowError)
+     * ✅ AGORA: Retorna EventResponseDTO (sem referências circulares)
+     * 
+     * @param trackingCode Código de rastreio do pacote
+     * @param createEventDTO Dados do evento (validados com @Valid)
+     * @return EventResponseDTO com status 201 Created
      */
     @PostMapping("/package/{trackingCode}")
-    public ResponseEntity<Event> createEvent(@PathVariable String trackingCode, @Valid @RequestBody Event event) {
+    public ResponseEntity<EventResponseDTO> createEvent(
+            @PathVariable String trackingCode,
+            @Valid @RequestBody CreateEventDTO createEventDTO) {
 
-        // Busca o pacote para verificar se ele existe
-        Package pkg = packageRepository.findByTrackingCode(trackingCode)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Package with tracking code '" + trackingCode + "' not found"));
+        // Log para debug
+        System.out.println("[EventController] Criando evento para pacote: " + trackingCode);
+        System.out.println("[EventController] Dados recebidos: " + createEventDTO);
 
-        // Define o relacionamento do evento com o pacote
-        event.setPackageEntity(pkg);
+        // Chama o serviço para processar a lógica de negócio
+        // O serviço já retorna DTO, não a entidade JPA
+        EventResponseDTO createdEvent = eventService.createEvent(trackingCode, createEventDTO);
 
-        // Se o timestamp não foi informado, define como agora
-        if (event.getEventTimestamp() == null) {
-            event.setEventTimestamp(LocalDateTime.now());
-        }
+        System.out.println("[EventController] ✅ Evento criado com ID: " + createdEvent.getId());
 
-        // Salva o evento no banco
-        Event createdEvent = eventRepository.save(event);
-
-        // Retorna 201 Created com o evento salvo
+        // ✅ Retorna DTO com status 201 Created
+        // SEM RISCO de StackOverflowError porque não há referência circular
         return ResponseEntity.status(HttpStatus.CREATED).body(createdEvent);
     }
 
     /**
-     * Exclui um evento específico com base em seu ID.
-     *
-     * @param eventId ID do evento (não pode ser nulo)
+     * DELETE /api/events/{eventId}
+     * Deleta um evento específico por ID.
+     * 
+     * @param eventId ID do evento a ser deletado
+     * @return Status 204 No Content se deletado com sucesso
      */
     @DeleteMapping("/{eventId}")
-    public ResponseEntity<Void> deleteEvent(@PathVariable long eventId) {
-        // Busca o evento para verificar se existe
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Event with id '" + eventId + "' not found"));
-
-        // Deleta o evento permanentemente
-        eventRepository.delete(event);
-
-        // Retorna 204 No Content indicando sucesso
+    public ResponseEntity<Void> deleteEvent(@PathVariable Long eventId) {
+        eventService.deleteEvent(eventId);
         return ResponseEntity.noContent().build();
     }
 }
