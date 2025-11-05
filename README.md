@@ -734,16 +734,6 @@ Agradeço à equipe da **GW Sistemas** pela oportunidade de desenvolver este des
 **Versão:** 1.0.0  
 **Última atualização:** 05 de Novembro de 2025
 
----
 
-### 🌐 Links Importantes
-
-**Demo Online:**
-- Frontend: [gw-challenge.vercel.app](https://gw-challenge.vercel.app)
-- Backend API: [gw-challenge.onrender.com](https://gw-challenge.onrender.com)
-
-**Downloads:**
-- [Backend JAR](https://drive.google.com/file/d/1a7NzD2VPnlBWmanT0_DlGOMq_xaFhJZC/view?usp=sharing)
-- [Database SQL](https://drive.google.com/file/d/1R3y9MWrj55kJIq4ttmAD0PRbn-Y3htj6/view?usp=sharing)
 
 </div>
