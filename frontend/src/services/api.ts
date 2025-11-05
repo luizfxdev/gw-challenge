@@ -87,7 +87,7 @@ api.interceptors.response.use(
 export const login = async (credentials: LoginCredentials): Promise<LoginResponse> => {
   try {
     // Fazer requisição POST para /api/auth/login
-    const response = await api.post<LoginResponse>('/auth/login', credentials);
+    const response = await api.post<LoginResponse>('/api/auth/login', credentials);
     // Se login for bem-sucedido e retornar token
     if (response.data.success && response.data.token) {
       // Armazenar token no localStorage para uso futuro
@@ -180,17 +180,14 @@ export const createEvent = async (
   console.log('[api.ts] createEvent chamado com:');
   console.log('[api.ts] trackingCode:', trackingCode);
   console.log('[api.ts] eventData:', eventData);
-
   // Validar se trackingCode foi passado
   if (!trackingCode || trackingCode === 'undefined') {
     console.error('[api.ts] ❌ trackingCode inválido ou undefined!');
     throw new Error('Código de rastreio inválido ou não fornecido');
   }
-
   // Construir URL
   const url = `/events/package/${trackingCode}`;
   console.log('[api.ts] URL da requisição:', url);
-
   try {
     const response = await api.post<Event>(url, eventData);
     console.log('[api.ts] ✅ Evento criado com sucesso:', response.data);
