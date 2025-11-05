@@ -80,14 +80,14 @@ api.interceptors.response.use(
 // ======================== SERVIÇOS DE AUTENTICAÇÃO ========================
 /**
  * Realizar login no sistema
- * Endpoint: POST /api/auth/login
+ * Endpoint: POST /auth/login
  * @param credentials - Objeto contendo username e password
  * @returns Promise com resposta de login (token, usuário, etc.)
  */
 export const login = async (credentials: LoginCredentials): Promise<LoginResponse> => {
   try {
-    // Fazer requisição POST para /api/auth/login
-    const response = await api.post<LoginResponse>('/api/auth/login', credentials);
+    // Fazer requisição POST para /auth/login
+    const response = await api.post<LoginResponse>('/auth/login', credentials);
     // Se login for bem-sucedido e retornar token
     if (response.data.success && response.data.token) {
       // Armazenar token no localStorage para uso futuro
@@ -113,7 +113,7 @@ export const logout = (): void => {
 // ======================== SERVIÇOS DE PACOTES ========================
 /**
  * Buscar todos os pacotes cadastrados
- * Endpoint: GET /api/packages
+ * Endpoint: GET /packages
  * @returns Promise com array de pacotes
  */
 export const getAllPackages = async (): Promise<Package[]> => {
@@ -123,7 +123,7 @@ export const getAllPackages = async (): Promise<Package[]> => {
 
 /**
  * Buscar pacote específico por código de rastreio
- * Endpoint: GET /api/packages/{trackingCode}
+ * Endpoint: GET /packages/{trackingCode}
  * @param trackingCode - Código de rastreio único (ex: GW123456789)
  * @returns Promise com dados completos do pacote (incluindo eventos)
  */
@@ -135,7 +135,7 @@ export const getPackageByTrackingCode = async (trackingCode: string): Promise<Pa
 
 /**
  * Criar novo pacote no sistema
- * Endpoint: POST /api/packages
+ * Endpoint: POST /packages
  * @param packageData - Dados do novo pacote (trackingCode, clientName, deliveryAddress)
  * @returns Promise com pacote criado
  */
@@ -146,7 +146,7 @@ export const createPackage = async (packageData: CreatePackageDTO): Promise<Pack
 
 /**
  * Deletar pacote por trackingCode
- * Endpoint: DELETE /api/packages/{trackingCode}
+ * Endpoint: DELETE /packages/{trackingCode}
  * @param trackingCode - Código de rastreio do pacote a ser deletado
  */
 export const deletePackage = async (trackingCode: string): Promise<void> => {
@@ -156,7 +156,7 @@ export const deletePackage = async (trackingCode: string): Promise<void> => {
 // ======================== SERVIÇOS DE EVENTOS ========================
 /**
  * Buscar todos os eventos de um pacote específico
- * Endpoint: GET /api/events/package/{trackingCode}
+ * Endpoint: GET /events/package/{trackingCode}
  * @param trackingCode - Código de rastreio do pacote
  * @returns Promise com array de eventos ordenados por data
  */
@@ -167,7 +167,7 @@ export const getEventsByTrackingCode = async (trackingCode: string): Promise<Eve
 
 /**
  * Criar novo evento/ocorrência para um pacote
- * Endpoint: POST /api/events/package/{trackingCode}
+ * Endpoint: POST /events/package/{trackingCode}
  * @param trackingCode - Código de rastreio do pacote (OBRIGATÓRIO)
  * @param eventData - Dados do novo evento (status, description, eventTimestamp)
  * @returns Promise com evento criado (incluindo ID e timestamps)
@@ -203,7 +203,7 @@ export const createEvent = async (
 
 /**
  * Deletar evento por ID
- * Endpoint: DELETE /api/events/{id}
+ * Endpoint: DELETE /events/{id}
  * @param id - ID do evento a ser deletado
  */
 export const deleteEvent = async (id: number): Promise<void> => {
