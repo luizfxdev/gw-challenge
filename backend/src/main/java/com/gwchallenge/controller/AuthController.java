@@ -2,7 +2,6 @@ package com.gwchallenge.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +13,7 @@ import java.util.Map;
  * Em produção, deve ser substituído por autenticação JWT/OAuth2.
  */
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 @CrossOrigin(origins = "*") // Permite requisições de qualquer origem (ajustar em produção)
 public class AuthController {
 
@@ -29,20 +28,17 @@ public class AuthController {
     public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> credentials) {
         String username = credentials.get("username");
         String password = credentials.get("password");
-
         Map<String, Object> response = new HashMap<>();
-
+        
         // Validação simples (SUBSTITUIR POR AUTENTICAÇÃO REAL EM PRODUÇÃO)
         if ("admin".equals(username) && "gw@sist123".equals(password)) {
             response.put("success", true);
             response.put("message", "Login realizado com sucesso");
             response.put("token", "mock-jwt-token-12345"); // Token mock (implementar JWT real depois)
-            
             Map<String, String> user = new HashMap<>();
             user.put("username", username);
             user.put("role", "ADMIN");
             response.put("user", user);
-
             return ResponseEntity.ok(response);
         } else {
             response.put("success", false);
