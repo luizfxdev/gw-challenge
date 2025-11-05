@@ -1,4 +1,3 @@
-cat > .gitignore <<'EOF'
 # ======================== BACKEND (Maven/Java) ========================
 # Maven
 target/
@@ -52,4 +51,42 @@ coverage/
 # ======================== Build e dist ========================
 dist/
 build/
-EOF
+
+# ======================== Vercel ========================
+.vercel
+
+# ======================== ADIÇÕES RECOMENDADAS ========================
+# Arquivos de sistema
+.env.production.local
+.env.test.local
+
+# Cache do npm/yarn/pnpm
+.pnpm-debug.log*
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# Arquivos de lock (opcional - descomente se quiser)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# Arquivos de IDE específicos
+.DS_Store
+.AppleDouble
+.LSOverride
+*.cer
+*.jks
+
+# Arquivos temporários do editor
+*.bak
+*.tmp
+*.temp
+
+# Diretórios de build específicos
+.turbo/
+.cache/
+
+# Arquivos de configuração local
+.env.local.backup
