@@ -7,13 +7,20 @@ spring:
   # Define como a aplicação se conecta ao PostgreSQL
   datasource:
     # URL de conexão com o banco de dados PostgreSQL
-    # localhost:5432 = servidor local na porta padrão do PostgreSQL
-    # gwchallenge = nome do banco de dados
-    url: jdbc:postgresql://localhost:5432/gwchallenge
+    # Usa variável de ambiente DATABASE_URL se disponível (Render)
+    # Caso contrário, usa localhost:5432 para desenvolvimento local
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/gwchallenge}
+
     # Usuário do banco de dados PostgreSQL
-    username: postgres
+    # Usa variável de ambiente DB_USERNAME se disponível
+    # Caso contrário, usa 'postgres' como padrão
+    username: ${DB_USERNAME:postgres}
+
     # Senha do usuário postgres
-    password: minhasenha123
+    # Usa variável de ambiente DB_PASSWORD se disponível
+    # Caso contrário, usa 'minhasenha123' como padrão
+    password: ${DB_PASSWORD:minhasenha123}
+
     # Driver JDBC específico para PostgreSQL
     # Permite que o Spring se comunique com o banco PostgreSQL
     driver-class-name: org.postgresql.Driver
@@ -26,8 +33,10 @@ spring:
     # update = Atualiza o schema automaticamente sem deletar dados existentes
     hibernate:
       ddl-auto: update
+
     # show-sql: true = Exibe as queries SQL no console (útil para debug)
     show-sql: true
+
     # properties.hibernate.format_sql: true = Formata as queries para melhor legibilidade
     properties:
       hibernate:
@@ -35,8 +44,8 @@ spring:
         # dialect: Define qual banco de dados estamos usando
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
-  # ======================== CONFIGURAÇÃO DO SERVIDOR ========================
-  # Define porta, contexto e outras configurações do servidor
+  # ======================== CONFIGURAÇÃO DO SERVLET ========================
+  # Define o contexto raiz da aplicação
   servlet:
     # context-path: /api = Todas as rotas serão prefixadas com /api
     # Ex: /auth/login vira /api/auth/login
@@ -44,8 +53,10 @@ spring:
 
 # ======================== CONFIGURAÇÃO DO SERVIDOR TOMCAT ========================
 server:
-  # port: 8080 = A aplicação rodará na porta 8080
-  port: 8080
+  # port: Usa variável de ambiente PORT se disponível (Render)
+  # Caso contrário, usa 8080 como padrão para desenvolvimento local
+  port: ${PORT:8080}
+
   # servlet.context-path: /api = Prefixo para todas as rotas
   servlet:
     context-path: /api
@@ -55,6 +66,7 @@ server:
     # include-message: always = Sempre inclui a mensagem de erro nas respostas
     # Ajuda o cliente a entender o que deu errado
     include-message: always
+
     # include-stacktrace: never = Nunca expõe o stacktrace em produção
     # Melhora a segurança, não revelando detalhes internos da aplicação
     include-stacktrace: never
@@ -66,11 +78,14 @@ logging:
     # DEBUG para o pacote da aplicação = Exibe logs detalhados
     # Útil para entender o fluxo da aplicação durante desenvolvimento
     com.gwchallenge: DEBUG
+
     # DEBUG para queries SQL do Hibernate
     # Exibe todas as queries executadas contra o banco de dados
     org.hibernate.SQL: DEBUG
+
     # INFO para o Spring Web
     # Exibe informações gerais sobre requisições HTTP
     org.springframework.web: INFO
+
     # INFO para o Spring Security
     org.springframework.security: INFO
