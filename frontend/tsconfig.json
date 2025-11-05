@@ -11,38 +11,31 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "jsx": "preserve",
-    "resolveJsonModule": true,
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
-    "baseUrl": ".",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "preserve",
+    "strict": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": true,
+    "incremental": true,
     "paths": {
       "@/*": [
-        "src/*"
+        "./src/*"
       ]
     },
-    "types": [
-      "jest",
-      "@testing-library/jest-dom"
-    ],
-    "jsxImportSource": "react",
-    "allowJs": true,
-    "incremental": true,
-    "isolatedModules": true
+    "allowJs": true
   },
   "include": [
-    "src",
-    "tests"
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"
-  ],
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
-    }
   ]
 }
