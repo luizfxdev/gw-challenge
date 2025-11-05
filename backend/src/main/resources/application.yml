@@ -10,13 +10,10 @@ spring:
     # localhost:5432 = servidor local na porta padrão do PostgreSQL
     # gwchallenge = nome do banco de dados
     url: jdbc:postgresql://localhost:5432/gwchallenge
-
     # Usuário do banco de dados PostgreSQL
     username: postgres
-
-    # Senha do usuário postgres (conforme você informou)
+    # Senha do usuário postgres
     password: minhasenha123
-
     # Driver JDBC específico para PostgreSQL
     # Permite que o Spring se comunique com o banco PostgreSQL
     driver-class-name: org.postgresql.Driver
@@ -25,56 +22,39 @@ spring:
   # JPA (Java Persistence API) é a interface padrão para acesso a dados
   # Hibernate é a implementação ORM (Object-Relational Mapping) que usamos
   jpa:
-    # Configuração do Hibernate
+    # hibernate.ddl-auto controla como o Hibernate gerencia o schema do banco
+    # update = Atualiza o schema automaticamente sem deletar dados existentes
     hibernate:
-      # ddl-auto: update = Atualiza o schema do banco automaticamente
-      # Cria tabelas se não existirem e adiciona colunas novas
-      # Outras opções: create, create-drop, validate, none
       ddl-auto: update
-
-    # show-sql: true = Exibe todas as queries SQL no console
-    # Útil para debug e entender o que o Hibernate está fazendo
+    # show-sql: true = Exibe as queries SQL no console (útil para debug)
     show-sql: true
-
-    # Propriedades específicas do Hibernate
+    # properties.hibernate.format_sql: true = Formata as queries para melhor legibilidade
     properties:
       hibernate:
-        # dialect: Define o dialeto SQL específico do banco de dados
-        # PostgreSQLDialect = Usa sintaxe SQL específica do PostgreSQL
+        format_sql: true
+        # dialect: Define qual banco de dados estamos usando
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
-        # format_sql: true = Formata as queries SQL no console
-        # Deixa as queries mais legíveis com quebras de linha e indentação
-        format_sql: true
-
-        # use_sql_comments: true = Adiciona comentários nas queries geradas
-        # Ajuda a entender qual entidade/operação gerou cada query
-        use_sql_comments: true
-
-  # ======================== CONFIGURAÇÃO DA APLICAÇÃO ========================
-  application:
-    # Nome da aplicação (usado em logs e monitoramento)
-    name: gw-challenge
+  # ======================== CONFIGURAÇÃO DO SERVIDOR ========================
+  # Define porta, contexto e outras configurações do servidor
+  servlet:
+    # context-path: /api = Todas as rotas serão prefixadas com /api
+    # Ex: /auth/login vira /api/auth/login
+    context-path: /api
 
 # ======================== CONFIGURAÇÃO DO SERVIDOR TOMCAT ========================
-# Tomcat é o servidor web embutido que roda a aplicação Spring Boot
 server:
-  # Porta onde a aplicação será acessível
-  # Acesse em: http://localhost:8080
+  # port: 8080 = A aplicação rodará na porta 8080
   port: 8080
-
-  # Configuração do servlet
+  # servlet.context-path: /api = Prefixo para todas as rotas
   servlet:
-    # context-path: / = A aplicação roda na raiz do servidor
-    # Se fosse /api, a URL seria http://localhost:8080/api
-    context-path: /
+    context-path: /api
 
-  # Configuração de tratamento de erros
+  # ======================== CONFIGURAÇÃO DE TRATAMENTO DE ERROS ========================
   error:
     # include-message: always = Sempre inclui a mensagem de erro nas respostas
     # Ajuda o cliente a entender o que deu errado
     include-message: always
-
     # include-stacktrace: never = Nunca expõe o stacktrace em produção
     # Melhora a segurança, não revelando detalhes internos da aplicação
     include-stacktrace: never
@@ -86,11 +66,11 @@ logging:
     # DEBUG para o pacote da aplicação = Exibe logs detalhados
     # Útil para entender o fluxo da aplicação durante desenvolvimento
     com.gwchallenge: DEBUG
-
     # DEBUG para queries SQL do Hibernate
     # Exibe todas as queries executadas contra o banco de dados
     org.hibernate.SQL: DEBUG
-
     # INFO para o Spring Web
     # Exibe informações gerais sobre requisições HTTP
     org.springframework.web: INFO
+    # INFO para o Spring Security
+    org.springframework.security: INFO
