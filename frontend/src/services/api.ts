@@ -20,9 +20,9 @@ import type {
  */
 const api: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api',
-  timeout: 10000, // Timeout de 10 segundos para requisições
+  timeout: 10000,
   headers: {
-    'Content-Type': 'application/json', // Todas as requisições enviam JSON
+    'Content-Type': 'application/json',
   },
 });
 
@@ -180,14 +180,17 @@ export const createEvent = async (
   console.log('[api.ts] createEvent chamado com:');
   console.log('[api.ts] trackingCode:', trackingCode);
   console.log('[api.ts] eventData:', eventData);
+
   // Validar se trackingCode foi passado
   if (!trackingCode || trackingCode === 'undefined') {
     console.error('[api.ts] ❌ trackingCode inválido ou undefined!');
     throw new Error('Código de rastreio inválido ou não fornecido');
   }
+
   // Construir URL
   const url = `/events/package/${trackingCode}`;
   console.log('[api.ts] URL da requisição:', url);
+
   try {
     const response = await api.post<Event>(url, eventData);
     console.log('[api.ts] ✅ Evento criado com sucesso:', response.data);
