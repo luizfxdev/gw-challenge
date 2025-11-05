@@ -89,7 +89,7 @@ A aplicação está disponível online para testes e demonstração:
 
 Para acessar a aplicação, use:
 - **Usuário:** `admin`
-- **Senha:** `admin`
+- **Senha:** `gw@sist123`
 
 ### 📝 Como Usar
 
