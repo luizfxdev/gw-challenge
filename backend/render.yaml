@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: gw-challenge-backend
+    env: java
+    plan: free
+    buildCommand: ./mvnw clean package -DskipTests
+    startCommand: java -jar target/gw-challenge-0.0.1-SNAPSHOT.jar
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: ${DATABASE_URL}
+      - key: SPRING_DATASOURCE_USERNAME
+        value: ${DATABASE_USER}
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: ${DATABASE_PASSWORD}
+      - key: SPRING_JPA_HIBERNATE_DDL_AUTO
+        value: update
+      - key: SERVER_PORT
+        value: 10000
+
+  - type: pserv
+    name: gw-challenge-db
+    plan: free
+    ipAllowList: []
+    postgresVersion: 15
+    initialDatabase: gwchallenge
+    user: postgres
+    password: ${DB_PASSWORD}
