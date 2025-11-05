@@ -13,6 +13,7 @@
 
 **Sistema completo de rastreamento de encomendas com arquitetura escalável e moderna**
 
+[🌐 Demo Online](#-demo-online) •
 [📖 Documentação](#-documentação-detalhada) •
 [🚀 Quick Start](#-quick-start) •
 [🐳 Docker](#-docker) •
@@ -25,6 +26,7 @@
 ## 📋 Índice
 
 - [Visão Geral](#-visão-geral)
+- [Demo Online](#-demo-online)
 - [Arquitetura](#-arquitetura)
 - [Documentação Detalhada](#-documentação-detalhada)
 - [Stack Tecnológico](#-stack-tecnológico)
@@ -54,6 +56,52 @@ O **GW Challenge** é um sistema completo de rastreamento de encomendas desenvol
 ✅ **Validações Robustas** - Regras de negócio implementadas em todas as camadas  
 ✅ **Interface Responsiva** - Design adaptável para desktop, tablet e mobile  
 ✅ **Containerização** - Deploy simplificado com Docker Compose  
+
+---
+
+## 🌐 Demo Online
+
+<div align="center">
+
+### 🚀 Aplicação em Produção
+
+A aplicação está disponível online para testes e demonstração:
+
+| Serviço | URL | Status |
+|---------|-----|--------|
+| **Frontend** | [gw-challenge.vercel.app](https://gw-challenge.vercel.app) | 🟢 Online |
+| **Backend API** | [gw-challenge.onrender.com](https://gw-challenge.onrender.com) | 🟢 Online |
+
+### 📌 Informações Importantes
+
+⚠️ **Backend (Render.com):**
+- O backend está hospedado no **Render.com** (plano gratuito)
+- **Primeira requisição pode demorar 30-60 segundos** (cold start)
+- Após o primeiro acesso, a API responde normalmente
+- Se a aplicação ficar inativa por 15 minutos, o servidor hiberna automaticamente
+
+✅ **Frontend (Vercel):**
+- O frontend está hospedado na **Vercel**
+- Resposta instantânea (sempre ativo)
+- Configurado para apontar para o backend em produção
+
+### 🔑 Credenciais de Teste
+
+Para acessar a aplicação, use:
+- **Usuário:** `admin`
+- **Senha:** `admin`
+
+### 📝 Como Usar
+
+1. Acesse [gw-challenge.vercel.app](https://gw-challenge.vercel.app)
+2. Faça login com as credenciais acima
+3. Aguarde a primeira requisição ao backend (pode demorar ~30s)
+4. Explore as funcionalidades:
+   - 🔍 Rastrear pacotes existentes (ex: `GWTEST0001`)
+   - ➕ Criar novos pacotes
+   - 📝 Registrar eventos de rastreamento
+
+</div>
 
 ---
 
@@ -317,6 +365,16 @@ volumes:
 | **gw-challenge-backend.jar** | ~38 MB | Aplicação Spring Boot compilada | [📦 Download](https://drive.google.com/file/d/1a7NzD2VPnlBWmanT0_DlGOMq_xaFhJZC/view?usp=sharing) |
 | **gw-challenge-ddl.sql** | ~5 KB | Script SQL do banco de dados | [📄 Download](https://drive.google.com/file/d/1R3y9MWrj55kJIq4ttmAD0PRbn-Y3htj6/view?usp=sharing) |
 
+### 🌐 URLs de Produção
+
+| Serviço | URL |
+|---------|-----|
+| **Frontend (Vercel)** | https://gw-challenge.vercel.app |
+| **Backend API (Render)** | https://gw-challenge.onrender.com |
+| **API Docs** | https://gw-challenge.onrender.com/api |
+
+> **⚠️ Nota:** O backend no Render.com pode ter cold start de ~30-60s na primeira requisição após inatividade.
+
 ### Como Usar os Downloads
 
 #### Executar o .jar
@@ -564,9 +622,14 @@ logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
 # API URL
 NEXT_PUBLIC_API_URL=http://localhost:8080/api
 
+# Production API URL (Render.com)
+# NEXT_PUBLIC_API_URL=https://gw-challenge.onrender.com/api
+
 # Environment
 NODE_ENV=development
 ```
+
+> **💡 Dica:** Para usar a API em produção, comente a URL local e descomente a URL do Render.
 
 ---
 
@@ -670,5 +733,17 @@ Agradeço à equipe da **GW Sistemas** pela oportunidade de desenvolver este des
 
 **Versão:** 1.0.0  
 **Última atualização:** 05 de Novembro de 2025
+
+---
+
+### 🌐 Links Importantes
+
+**Demo Online:**
+- Frontend: [gw-challenge.vercel.app](https://gw-challenge.vercel.app)
+- Backend API: [gw-challenge.onrender.com](https://gw-challenge.onrender.com)
+
+**Downloads:**
+- [Backend JAR](https://drive.google.com/file/d/1a7NzD2VPnlBWmanT0_DlGOMq_xaFhJZC/view?usp=sharing)
+- [Database SQL](https://drive.google.com/file/d/1R3y9MWrj55kJIq4ttmAD0PRbn-Y3htj6/view?usp=sharing)
 
 </div>
